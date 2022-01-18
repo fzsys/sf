@@ -1,0 +1,1 @@
+<p>Hello, <?= htmlspecialchars($name, ENT_QUOTES) ?></p>
