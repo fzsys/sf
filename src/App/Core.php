@@ -4,10 +4,10 @@ namespace App;
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\Controller\ArgumentResolver;
-use Symfony\Component\HttpKernel\Controller\ControllerResolver;
+use Symfony\Component\HttpKernel\Controller\ArgumentResolverInterface;
+use Symfony\Component\HttpKernel\Controller\ControllerResolverInterface;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
-use Symfony\Component\Routing\Matcher\UrlMatcher;
+use Symfony\Component\Routing\Matcher\UrlMatcherInterface;
 
 /**
  * Framework core.
@@ -17,28 +17,28 @@ class Core {
   /**
    * @var \Symfony\Component\Routing\Matcher\UrlMatcher
    */
-  protected UrlMatcher $matcher;
+  protected UrlMatcherInterface $matcher;
 
   /**
    * @var \Symfony\Component\HttpKernel\Controller\ControllerResolver
    */
-  protected ControllerResolver $controllerResolver;
+  protected ControllerResolverInterface $controllerResolver;
 
   /**
    * @var \Symfony\Component\HttpKernel\Controller\ArgumentResolver
    */
-  protected ArgumentResolver $argumentResolver;
+  protected ArgumentResolverInterface $argumentResolver;
 
   /**
    * Constructs new Core object.
    *
-   * @param \Symfony\Component\Routing\Matcher\UrlMatcher $matcher
-   * @param \Symfony\Component\HttpKernel\Controller\ControllerResolver $controllerResolver
-   * @param \Symfony\Component\HttpKernel\Controller\ArgumentResolver $argumentResolver
+   * @param \Symfony\Component\Routing\Matcher\UrlMatcherInterface $matcher
+   * @param \Symfony\Component\HttpKernel\Controller\ControllerResolverInterface $controllerResolver
+   * @param \Symfony\Component\HttpKernel\Controller\ArgumentResolverInterface $argumentResolver
    */
-  public function __construct(UrlMatcher $matcher, 
-                              ControllerResolver $controllerResolver, 
-                              ArgumentResolver $argumentResolver) {
+  public function __construct(UrlMatcherInterface $matcher,
+                              ControllerResolverInterface $controllerResolver,
+                              ArgumentResolverInterface $argumentResolver) {
     $this->matcher = $matcher;
     $this->controllerResolver = $controllerResolver;
     $this->argumentResolver = $argumentResolver;
