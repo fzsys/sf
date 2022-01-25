@@ -7,7 +7,7 @@ use Symfony\Component\Routing\RouteCollection;
 $routes = new RouteCollection();
 
 $routes->add('home', new Route('/', [
-  '_controller' => fn() => new Response('Home.'),
+  '_controller' => fn() => new Response('<p>Home.</p>'),
 ]));
 $routes->add('leap_year', new Route('/is-leap-year/{year}', [
   'year' => NULL,

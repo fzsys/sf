@@ -2,6 +2,7 @@
 
 namespace App;
 
+use Symfony\Component\EventDispatcher\EventDispatcher;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Controller\ArgumentResolverInterface;
@@ -30,18 +31,26 @@ class Core {
   protected ArgumentResolverInterface $argumentResolver;
 
   /**
+   * @var \Symfony\Component\EventDispatcher\EventDispatcher
+   */
+  protected EventDispatcher $dispatcher;
+
+  /**
    * Constructs new Core object.
    *
    * @param \Symfony\Component\Routing\Matcher\UrlMatcherInterface $matcher
    * @param \Symfony\Component\HttpKernel\Controller\ControllerResolverInterface $controllerResolver
    * @param \Symfony\Component\HttpKernel\Controller\ArgumentResolverInterface $argumentResolver
+   * @param \Symfony\Component\EventDispatcher\EventDispatcher $eventDispatcher
    */
   public function __construct(UrlMatcherInterface $matcher,
                               ControllerResolverInterface $controllerResolver,
-                              ArgumentResolverInterface $argumentResolver) {
+                              ArgumentResolverInterface $argumentResolver,
+                              EventDispatcher $eventDispatcher) {
     $this->matcher = $matcher;
     $this->controllerResolver = $controllerResolver;
     $this->argumentResolver = $argumentResolver;
+    $this->dispatcher = $eventDispatcher;
   }
 
   /**
@@ -61,11 +70,16 @@ class Core {
       $controller = $this->controllerResolver->getController($request);
       $arguments = $this->argumentResolver->getArguments($request, $controller);
 
-      return call_user_func_array($controller, $arguments);
+      $response = call_user_func_array($controller, $arguments);
     } catch (ResourceNotFoundException $e) {
-      return new Response('Not Found', 404);
+      $response = new Response('Not Found', 404);
     } catch (\Exception $e) {
-      return new Response('An error occurred', 500);
+      $response = new Response('An error occurred', 500);
     }
+
+    // dispatch a response event
+    $this->dispatcher->dispatch(new ResponseEvent($response, $request), 'response');
+
+    return $response;
   }
 }
