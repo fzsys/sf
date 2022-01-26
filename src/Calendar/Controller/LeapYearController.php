@@ -13,16 +13,19 @@ class LeapYearController {
   /**
    * @param $year
    *
-   * @return \Symfony\Component\HttpFoundation\Response
+   * @return string
    */
-  public function index($year): Response {
+  public function index($year): string {
 
     $leapYear = new LeapYear();
 
     if ($leapYear->isLeapYear($year)) {
-      return new Response('<p>This is a leap year!</p>');
+      return '<p>This is a leap year!</p>';
     }
-    return new Response('<p>This is not leap year.</p>');
+     else {
+       return '<p>This is not leap year.</p>';
+     }
+
   }
 
 }

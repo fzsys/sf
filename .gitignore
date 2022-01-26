@@ -6,3 +6,5 @@
 
 #phpunit
 .phpunit.result.cache
+
+/cache/
